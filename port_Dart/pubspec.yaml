@@ -1,7 +1,0 @@
-name: grun4py
-
-environment:
-  sdk: ^3.4.4
-
-dependencies:
-  antlr4: 4.13.1

@@ -9,14 +9,15 @@
 - first download the necessary node modules and set the ```type``` field in the ```package.json``` then copy the two grammar files and example.py to this directory:
 ```bash
     npm install antlr4
+    npm install iconv-lite
     npm install webpack
     npm pkg set type=module
 ```
 
-Unix:
+Linux:
 ```bash
-    cp ../*.g4 .
-    cp ../example.py .
+    cp ../*.g4
+    cp ../example.py
 ```
 
 Windows:
@@ -33,4 +34,4 @@ node grun4py.js example.py
 
 
 #### Related link:
-[JavaScript target](https://github.com/antlr/antlr4/blob/dev/doc/javascript-target.md)
+[ANTLR4 JavaScript target](https://github.com/antlr/antlr4/blob/dev/doc/javascript-target.md)

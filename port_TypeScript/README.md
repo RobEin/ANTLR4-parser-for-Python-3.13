@@ -10,15 +10,18 @@
 ```bash
     npm install typescript
     npm install typescript-collections
+    npm install iconv-lite
     npm install antlr4
     npm install webpack
-    npx tsc --init
+    npm install --save-dev @types/node
+    npx tsc --init --module commonjs --types node --exactOptionalPropertyTypes false --verbatimModuleSyntax false --esModuleInterop true
+
 ```
 
-Unix:
+Linux:
 ```bash
-    cp ../*.g4 .
-    cp ../example.py .
+    cp ../*.g4
+    cp ../example.py
 ```
 
 Windows:
@@ -36,4 +39,4 @@ node grun4py.js example.py
 
 
 #### Related link:
-[TypeScript target](https://github.com/antlr/antlr4/blob/dev/doc/typescript-target.md)
+[ANTLR4 TypeScript target](https://github.com/antlr/antlr4/blob/dev/doc/typescript-target.md)
