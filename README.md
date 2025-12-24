@@ -9,8 +9,6 @@
     - tokenizes f-string, t-string literals
     - and manage many other things
 
-- Example files from: [Python 3.14 Standard Lib](https://github.com/python/cpython/tree/3.14/Lib)<br/><br/>
-
 ### Recent changes:
 - refreshed the parser grammar for Python 3.14.2
 - tokenizing t-string literals
