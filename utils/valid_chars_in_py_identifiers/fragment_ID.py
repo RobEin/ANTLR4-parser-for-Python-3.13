@@ -10,8 +10,18 @@ def main() -> None:
     print("main")
     python_version = f"for Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
     
-    start_codes = _collect_identifier_codes(is_start=True)
-    continue_codes = _collect_identifier_codes(is_start=False)
+    start_codes = []
+    continue_codes = []
+
+    for i in range(sys.maxunicode):
+        c = chr(i)
+        if c.isidentifier():
+            start_codes.append(i)
+        else:
+            id = 'a' + c
+            if id.isidentifier():
+                continue_codes.append(i)
+
     
     continue_fragment = _build_continue_fragment(continue_codes, python_version)
     start_fragment = _build_start_fragment(start_codes, python_version)
@@ -20,24 +30,6 @@ def main() -> None:
     
     print(output)
     _save_to_file(output, "fragment_ID.txt")
-
-
-def _collect_identifier_codes(is_start: bool) -> List[int]:
-    """Collect Unicode code points valid as identifier start or continue characters."""
-    codes = []
-    
-    for i in range(sys.maxunicode + 1):
-        c = chr(i)
-        
-        if is_start:
-            if c.isidentifier():
-                codes.append(i)
-        else:
-            # Check if character can continue an identifier (preceded by 'a')
-            if ('a' + c).isidentifier():
-                codes.append(i)
-    
-    return codes
 
 
 def _build_continue_fragment(continue_codes: List[int], python_version: str) -> str:
