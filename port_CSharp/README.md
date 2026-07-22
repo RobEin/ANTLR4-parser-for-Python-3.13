@@ -6,7 +6,8 @@
  
 
 #### Command line example for Windows:
- - first create a C# project called grun4py then copy the two grammar files and example.py to this directory:
+ - first create a C# project called grun4py then copy the two grammar files and example.py to this directory
+   (the [current ANTLR C# Runtime](https://www.nuget.org/packages/antlr4.runtime.standard/) version is 4.13.1):
 ```bash
     dotnet new console -o . -n grun4py -f net10.0
     del program.cs
