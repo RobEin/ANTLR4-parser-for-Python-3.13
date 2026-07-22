@@ -1,4 +1,4 @@
-# ANTLR4 parser for Python 3.14.2 &nbsp; [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+# ANTLR4 parser for Python 3.14.6 &nbsp; [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ### About files:
  - PythonParser.g4 is the ANTLR4 parser grammar that based on the official [Python PEG grammar](https://docs.python.org/3.14/reference/grammar.html)
@@ -10,12 +10,10 @@
     - and manage many other things
 
 ### Recent changes:
-- parser grammar update for Python 3.14.2
-- tokenizing t-string literals
-- tokenizing BOM Unicode character at the start of the file so it is skipped in the token stream
-- moved encoding detection from PythonLexerBase to a separate component (grun4py)
+- parser grammar update for Python 3.14.6
 
-#### [Previous changes](https://github.com/RobEin/ANTLR4-parser-for-Python-3.14/blob/main/changes.md)<br/><br/> 
+#### [Previous changes](https://github.com/RobEin/ANTLR4-parser-for-Python-3.14/blob/main/changes.md)<br/><br/>
+
 ### Related links:
 [ANTLR 4](https://www.antlr.org/)
 
