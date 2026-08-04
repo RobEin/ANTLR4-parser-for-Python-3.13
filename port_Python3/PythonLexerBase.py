@@ -75,11 +75,12 @@ class PythonLexerBase(Lexer):
         self._la_token: CommonToken = None
 
     def set_encoding_name(self, encoding_name: str) -> None:
-        """Sets the encoding name to emit an ENCODING token at the start of the token stream.
+        """
+        Sets the encoding name to emit an ENCODING token at the start of the token stream.
 
         Leave empty if not needed (e.g., when parsing from string).
 
-        :param encoding_name: ...
+        :param encoding_name: The encoding name (e.g., "utf-8"), or empty string to disable ENCODING token.
         """
         self._encodingName = encoding_name
 
