@@ -90,12 +90,12 @@ public class Grun4py
 
     private static string FormatToken(IToken token)
     {
-        string tokenText = EscapeSpecialChars(token.Text);
-        string tokenName = token.Type == TokenConstants.EOF
+        var tokenText = EscapeSpecialChars(token.Text);
+        var tokenName = token.Type == TokenConstants.EOF
             ? "EOF"
             : PythonLexer.DefaultVocabulary.GetSymbolicName(token.Type);
 
-        string channelName = token.Channel == TokenConstants.DefaultChannel
+        var channelName = token.Channel == TokenConstants.DefaultChannel
             ? ""
             : $"channel={token.Channel},";
 

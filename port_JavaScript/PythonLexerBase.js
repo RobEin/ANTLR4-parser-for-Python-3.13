@@ -46,7 +46,8 @@ export default class PythonLexerBase extends Lexer {
     #indentationLengthStack;
     #pendingTokenQueue;
 
-    #previousPendingTokenType;
+    // Last pending token types
+	#previousPendingTokenType;
     #lastPendingTokenTypeFromDefaultChannel;
 
     // Parenthesis / bracket / brace counts
@@ -121,7 +122,7 @@ export default class PythonLexerBase extends Lexer {
             return;
         }
 
-        this.#setCurrentAndFollowingTokens();
+        this.#setCurrentAndLookAheadTokens();
         if (this.#indentationLengthStack.length === 0) { // We're at the first token
             this.#handleStartOfInput();
         }
@@ -163,7 +164,7 @@ export default class PythonLexerBase extends Lexer {
         this.#handleFORMAT_SPECIFICATION_MODE();
     }
 
-    #setCurrentAndFollowingTokens() {
+    #setCurrentAndLookAheadTokens() {
         this.#curToken = this.#laToken == undefined ?
             super.nextToken() :
             this.#laToken;
@@ -190,7 +191,7 @@ export default class PythonLexerBase extends Lexer {
         this.#indentationLengthStack.push(0); // this will never be popped off
 
         if (this.#curToken.type === PythonLexer.BOM) {
-            this.#setCurrentAndFollowingTokens();
+            this.#setCurrentAndLookAheadTokens();
         }
 
         this.#insertENCODINGtoken();
@@ -207,7 +208,7 @@ export default class PythonLexerBase extends Lexer {
             } else {
                 this.#addPendingToken(this.#curToken); // it can be WS, EXPLICIT_LINE_JOINING or COMMENT token
             }
-            this.#setCurrentAndFollowingTokens();
+            this.#setCurrentAndLookAheadTokens();
         } // continue the processing of the EOF token with #processCurrentToken()
     }
 
@@ -253,7 +254,7 @@ export default class PythonLexerBase extends Lexer {
         const nlToken = this.#curToken.clone(); // save the current NEWLINE token
         const isLookingAhead = this.#laToken.type === PythonLexer.WS;
         if (isLookingAhead) {
-            this.#setCurrentAndFollowingTokens(); // set the next two tokens
+            this.#setCurrentAndLookAheadTokens(); // set the next two tokens
         }
 
         switch (this.#laToken.type) {

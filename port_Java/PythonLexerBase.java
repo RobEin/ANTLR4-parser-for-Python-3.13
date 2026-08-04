@@ -159,7 +159,7 @@ public abstract class PythonLexerBase extends Lexer {
     private void processCurrentToken() {
         if (this.previousPendingTokenType == Token.EOF) return;
 
-        this.setCurrentAndFollowingTokens();
+        this.setCurrentAndLookAheadTokens();
         if (this.indentationLengthStack.isEmpty()) { // We're at the first token
             this.handleStartOfInput();
         }
@@ -201,7 +201,7 @@ public abstract class PythonLexerBase extends Lexer {
         this.handleFORMAT_SPECIFICATION_MODE();
     }
 
-    private void setCurrentAndFollowingTokens() {
+    private void setCurrentAndLookAheadTokens() {
         this.curToken = this.laToken == null ?
                 super.nextToken() :
                 this.laToken;
@@ -227,7 +227,7 @@ public abstract class PythonLexerBase extends Lexer {
         this.indentationLengthStack.push(0); // this will never be popped off
 
         if (this.curToken.getType() == PythonLexer.BOM) {
-            this.setCurrentAndFollowingTokens();
+            this.setCurrentAndLookAheadTokens();
         }
         this.insertENCODINGtoken();
 
@@ -243,7 +243,7 @@ public abstract class PythonLexerBase extends Lexer {
             } else {
                 this.addPendingToken(this.curToken); // it can be WS, EXPLICIT_LINE_JOINING or COMMENT token
             }
-            this.setCurrentAndFollowingTokens();
+            this.setCurrentAndLookAheadTokens();
         }
         // continue the processing of the EOF token with processCurrentToken()
     }
@@ -290,7 +290,7 @@ public abstract class PythonLexerBase extends Lexer {
         final Token nlToken = new CommonToken(this.curToken); // save the current NEWLINE token
         final boolean isLookingAhead = this.laToken.getType() == PythonLexer.WS;
         if (isLookingAhead) {
-            this.setCurrentAndFollowingTokens(); // set the next two tokens
+            this.setCurrentAndLookAheadTokens(); // set the next two tokens
         }
 
         switch (this.laToken.getType()) {

@@ -915,7 +915,7 @@ name_except_underscore
     | NAME_OR_CASE
     ;
 
-// ***** Always use name rule instead of NAME token in this grammar *****
+// ***** Always use the name rule instead of the NAME token in this grammar *****
 name: NAME_OR_WILDCARD | name_except_underscore;
 
 // ========================= END OF THE GRAMMAR ===========================

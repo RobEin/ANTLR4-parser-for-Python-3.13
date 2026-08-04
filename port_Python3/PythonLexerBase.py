@@ -32,7 +32,7 @@ import sys
 class PythonLexerBase(Lexer):
     INVALID_LENGTH: Literal[-1] = -1
     ERR_TXT: Literal[" ERROR: "] = " ERROR: "
-    TAB_LENGTH: Literal[8] = 8    
+    TAB_LENGTH: Literal[8] = 8
     LEXER_MODES_FOR_ISTRING_START: dict[str, int] = {}
 
     def __init__(self, input: InputStream, output: TextIO = sys.stdout):
@@ -51,7 +51,7 @@ class PythonLexerBase(Lexer):
         self._pending_token_queue: deque[CommonToken] = deque()
 
         self._previous_pending_token_type: int = 0
-        self._last_pending_token_type_from_default_channel = 0
+        self._last_pending_token_type_from_default_channel: int = 0
 
         # Parenthesis / bracket / brace counts
         self._open_paren_bracket_brace_count: int = 0
@@ -92,7 +92,7 @@ class PythonLexerBase(Lexer):
         if self._previous_pending_token_type == Token.EOF:
             return
 
-        self._set_current_and_following_tokens()
+        self._set_current_and_look_ahead_tokens()
         if not self._indentation_length_stack:  # We're at the first token
             self._handle_start_of_input()
 
@@ -119,7 +119,7 @@ class PythonLexerBase(Lexer):
                 self.add_pending_token(self._cur_token)
         self._handle_FORMAT_SPECIFICATION_MODE()
 
-    def _set_current_and_following_tokens(self) -> None:
+    def _set_current_and_look_ahead_tokens(self) -> None:
         self._cur_token = super().nextToken() if self._la_token is None else self._la_token
 
         self._normalize_cur_token()  # Do not use laToken in this method or any of its submethods — it hasn't been set yet!
@@ -130,7 +130,6 @@ class PythonLexerBase(Lexer):
     # Handles BOM skipping, ENCODING token insertion, suppression of leading
     # NEWLINE tokens, and validation of the first INDENT before normal token
     # processing begins.
-
     def _handle_start_of_input(self) -> None:
         # - initialize indent stack with a default 0 indentation length
         # - skip BOM token
@@ -140,7 +139,7 @@ class PythonLexerBase(Lexer):
         self._indentation_length_stack.append(0)  # this will never be popped off
 
         if self._cur_token.type == self.BOM:
-            self._set_current_and_following_tokens()
+            self._set_current_and_look_ahead_tokens()
         self._insert_ENCODING_token()
 
         while self._cur_token.type != Token.EOF:
@@ -153,7 +152,7 @@ class PythonLexerBase(Lexer):
                     return  # continue the processing of the current token with _process_current_token()
             else:
                 self.add_pending_token(self._cur_token)  # it can be WS, EXPLICIT_LINE_JOINING or COMMENT token
-            self._set_current_and_following_tokens()
+            self._set_current_and_look_ahead_tokens()
         # continue the processing of the EOF token with _process_current_token()
 
     def _insert_ENCODING_token(self) -> None:  # https://peps.python.org/pep-0263/
@@ -193,7 +192,7 @@ class PythonLexerBase(Lexer):
         nl_token: CommonToken = self._cur_token.clone()  # save the current NEWLINE token
         is_looking_ahead: bool = self._la_token.type == self.WS
         if is_looking_ahead:
-            self._set_current_and_following_tokens()  # set the next two tokens
+            self._set_current_and_look_ahead_tokens()  # set the next two tokens
 
         match self._la_token.type:
             case self.NEWLINE | self.COMMENT:

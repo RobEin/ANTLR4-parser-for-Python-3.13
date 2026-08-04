@@ -70,7 +70,7 @@ export default abstract class PythonLexerBase extends Lexer {
 
     // Current / lookahead tokens
     private curToken: Token | undefined;
-    private laToken: Token | undefined;
+    private laToken:  Token | undefined;
 
     protected constructor(input: CharStream) {
         super(input);
@@ -118,10 +118,10 @@ export default abstract class PythonLexerBase extends Lexer {
     }
 
     private processCurrentToken(): void {
-        if (this.previousPendingTokenType == PythonLexer.EOF)
+        if (this.previousPendingTokenType === PythonLexer.EOF)
             return;
 
-        this.setCurrentAndFollowingTokens();
+        this.setCurrentAndLookAheadTokens();
         if (this.indentationLengthStack.isEmpty()) { // We're at the first token
             this.handleStartOfInput();
         }
@@ -163,7 +163,7 @@ export default abstract class PythonLexerBase extends Lexer {
         this.handleFORMAT_SPECIFICATION_MODE();
     }
 
-    private setCurrentAndFollowingTokens(): void {
+    private setCurrentAndLookAheadTokens(): void {
         this.curToken = this.laToken == undefined
             ? super.nextToken()
             : this.laToken;
@@ -189,7 +189,7 @@ export default abstract class PythonLexerBase extends Lexer {
         this.indentationLengthStack.push(0); // this will never be popped off
 
         if (this.curToken!.type === PythonLexer.BOM) {
-            this.setCurrentAndFollowingTokens();
+            this.setCurrentAndLookAheadTokens();
         }
         this.insertENCODINGtoken();
 
@@ -205,7 +205,7 @@ export default abstract class PythonLexerBase extends Lexer {
             } else {
                 this.addPendingToken(this.curToken!); // it can be WS, EXPLICIT_LINE_JOINING or COMMENT token
             }
-            this.setCurrentAndFollowingTokens();
+            this.setCurrentAndLookAheadTokens();
         } // continue the processing of the EOF token with processCurrentToken()
     }
 
@@ -251,7 +251,7 @@ export default abstract class PythonLexerBase extends Lexer {
         const nlToken: Token = this.curToken!.clone(); // save the current NEWLINE token
         const isLookingAhead: boolean = this.laToken!.type === PythonLexer.WS;
         if (isLookingAhead) {
-            this.setCurrentAndFollowingTokens(); // set the next two tokens
+            this.setCurrentAndLookAheadTokens(); // set the next two tokens
         }
 
         switch (this.laToken!.type) {
@@ -701,7 +701,7 @@ export default abstract class PythonLexerBase extends Lexer {
     // ===================== Format‑Specifier Handling =====================
 
     private handleFORMAT_SPECIFICATION_MODE(): void {
-        if (this.lexerModeStack.length == 0 || this.laToken!.type !== PythonLexer.RBRACE) {
+        if (this.lexerModeStack.length === 0 || this.laToken!.type !== PythonLexer.RBRACE) {
             return;
         }
 

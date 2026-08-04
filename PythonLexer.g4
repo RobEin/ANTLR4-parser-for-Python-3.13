@@ -71,6 +71,7 @@ GREATER          : '>';
 EQUAL            : '=';
 PERCENT          : '%';
 EQEQUAL          : '==';
+INEQUAL          : '<>'; // not implemented (from __future__ import barry_as_FLUFL)
 NOTEQUAL         : '!=';
 LESSEQUAL        : '<=';
 GREATEREQUAL     : '>=';

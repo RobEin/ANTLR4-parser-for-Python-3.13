@@ -28,9 +28,10 @@ THE SOFTWARE.
 
 using Antlr4.Runtime;
 using System;
-using System.Collections.Generic;
 using System.Collections.Frozen;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.Intrinsics.X86;
 
 
 [assembly: CLSCompliant(true)]
@@ -161,7 +162,7 @@ public abstract class PythonLexerBase : Lexer
         if (this.previousPendingTokenType == TokenConstants.EOF)
             return;
 
-        this.SetCurrentAndFollowingTokens();
+        this.SetCurrentAndLookAheadTokens();
         if (this.indentationLengthStack.Count == 0) // We're at the first token
         {
             this.HandleStartOfInput();
@@ -206,7 +207,7 @@ public abstract class PythonLexerBase : Lexer
         this.HandleFORMAT_SPECIFICATION_MODE();
     }
 
-    private void SetCurrentAndFollowingTokens()
+    private void SetCurrentAndLookAheadTokens()
     {
         this.curToken = this.laToken == null ?
                         base.NextToken() :
@@ -235,7 +236,7 @@ public abstract class PythonLexerBase : Lexer
 
         if (this.curToken.Type == PythonLexer.BOM)
         {
-            this.SetCurrentAndFollowingTokens();
+            this.SetCurrentAndLookAheadTokens();
         }
         this.InsertENCODINGtoken();
 
@@ -258,7 +259,7 @@ public abstract class PythonLexerBase : Lexer
             {
                 this.AddPendingToken(this.curToken); // it can be WS, EXPLICIT_LINE_JOINING, or COMMENT token
             }
-            this.SetCurrentAndFollowingTokens();
+            this.SetCurrentAndLookAheadTokens();
         } // continue the processing of the EOF token with ProcessCurrentToken()
     }
 
@@ -313,7 +314,7 @@ public abstract class PythonLexerBase : Lexer
         var isLookingAhead = this.laToken.Type == PythonLexer.WS;
         if (isLookingAhead)
         {
-            this.SetCurrentAndFollowingTokens(); // set the next two tokens
+            this.SetCurrentAndLookAheadTokens(); // set the next two tokens
         }
 
         switch (this.laToken.Type)
