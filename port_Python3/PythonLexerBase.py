@@ -26,7 +26,6 @@ from collections import deque
 from typing import Literal, TextIO, Optional
 from antlr4 import InputStream, Lexer, Token
 from antlr4.Token import CommonToken
-import PythonLexer
 import sys
 
 class PythonLexerBase(Lexer):
@@ -35,8 +34,8 @@ class PythonLexerBase(Lexer):
     TAB_LENGTH: Literal[8] = 8
     LEXER_MODES_FOR_ISTRING_START: dict[str, int] = {}
 
-    def __init__(self, input: InputStream, output: TextIO = sys.stdout):
-        super().__init__(input, output)
+    def __init__(self, input_stream: InputStream, output: TextIO = sys.stdout):
+        super().__init__(input_stream, output)
         self._init()
 
     def reset(self) -> None:
@@ -76,11 +75,11 @@ class PythonLexerBase(Lexer):
         self._la_token: CommonToken = None
 
     def set_encoding_name(self, encoding_name: str) -> None:
-        """
-        Sets the encoding name to emit an ENCODING token at the start of the token stream.
+        """Sets the encoding name to emit an ENCODING token at the start of the token stream.
+
         Leave empty if not needed (e.g., when parsing from string).
 
-        :param encoding_name: The encoding name (e.g., "utf-8"), or empty string to disable ENCODING token.
+        :param encoding_name: ...
         """
         self._encodingName = encoding_name
 
@@ -474,14 +473,14 @@ class PythonLexerBase(Lexer):
         text: str = self._cur_token.text
         return text[-2:] if len(text) >= 2 else text
 
-    def _trim_last_char_add_pending_token_set_cur_token(self, type: int, text: str, channel: int) -> None:
+    def _trim_last_char_add_pending_token_set_cur_token(self, token_type: int, text: str, channel: int) -> None:
         # trim the last char and add the modified curToken to the _pending_token_queue
         token_text_without_lbrace: str = self._cur_token.text[:-1]
         self._cur_token.text = token_text_without_lbrace
         self._cur_token.stop -= 1
         self.add_pending_token(self._cur_token)
 
-        self._replace_current_token(type, text, channel)  # set _cur_token
+        self._replace_current_token(token_type, text, channel)  # set _cur_token
 
     def _handle_COLONEQUAL_token_in_istring(self) -> None:  # istring = interpolated string (FSTRING or TSTRING)
         if self._lexer_mode_stack \
@@ -507,9 +506,9 @@ class PythonLexerBase(Lexer):
                     self._replace_current_token(self._active_interpolated_string_middle_token_type, "=", Token.DEFAULT_CHANNEL)
         self.add_pending_token(self._cur_token)
 
-    def _replace_current_token(self, type: int, text: str, channel: int) -> None:
+    def _replace_current_token(self, token_type: int, text: str, channel: int) -> None:
         token: CommonToken = self._cur_token.clone()
-        token.type = type
+        token.type = token_type
         token.text = text
         token.channel = channel
         token.column += 1
@@ -550,7 +549,7 @@ class PythonLexerBase(Lexer):
     # comprehension. Used to enforce Python’s rule that outermost f-string brace
     # expressions cannot be comprehensions.
     def _is_valid_dictionary_or_set_comprehension_expression(self, code: str) -> bool:
-        from antlr4 import InputStream, CommonTokenStream
+        from antlr4 import CommonTokenStream
         from PythonLexer import PythonLexer
         from PythonParser import PythonParser
 

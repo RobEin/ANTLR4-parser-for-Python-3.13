@@ -617,7 +617,7 @@ public abstract class PythonLexerBase extends Lexer {
         return text.length() >= 2 ? text.substring(text.length() - 2) : text;
     }
 
-    private void trimLastCharAddPendingTokenSetCurToken(final int type, final String text, final int channel) {
+    private void trimLastCharAddPendingTokenSetCurToken(final int tokenType, final String text, final int channel) {
         // trim the last char and add the modified curToken to the pendingTokenQueue
         final String curTokenText = this.curToken.getText();
         final String tokenTextWithoutLastChar = curTokenText.substring(0, curTokenText.length() - 1);
@@ -626,7 +626,7 @@ public abstract class PythonLexerBase extends Lexer {
         token.setStopIndex(token.getStopIndex() - 1);
         this.addPendingToken(token);
 
-        this.replaceCurrentToken(type, text, channel); // set curToken
+        this.replaceCurrentToken(tokenType, text, channel); // set curToken
     }
 
     private void handleCOLONEQUALtokenInIString() { // ISTRING = interpolated string (FSTRING or TSTRING)
@@ -660,9 +660,9 @@ public abstract class PythonLexerBase extends Lexer {
         this.addPendingToken(this.curToken);
     }
 
-    private void replaceCurrentToken(final int type, final String text, final int channel) {
+    private void replaceCurrentToken(final int tokenType, final String text, final int channel) {
         final CommonToken token = new CommonToken(this.curToken);
-        token.setType(type);
+        token.setType(tokenType);
         token.setText(text);
         token.setChannel(channel);
         token.setCharPositionInLine(token.getCharPositionInLine() + 1);

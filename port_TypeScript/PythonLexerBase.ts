@@ -629,14 +629,14 @@ export default abstract class PythonLexerBase extends Lexer {
         return text.length <= 2 ? text : text.slice(-2);
     }
 
-    private trimLastCharAddPendingTokenSetCurToken(type: number, text: string, channel: number): void {
+    private trimLastCharAddPendingTokenSetCurToken(tokenType: number, text: string, channel: number): void {
         // Trim the last char and add the modified curToken to the pendingTokenQueue
         const tokenTextWithoutLastChar: string = this.curToken!.text.slice(0, -1);
         this.curToken!.text = tokenTextWithoutLastChar;
         this.curToken!.stop -= 1;
         this.addPendingToken(this.curToken!);
 
-        this.replaceCurrentToken(type, text, channel); // Set curToken
+        this.replaceCurrentToken(tokenType, text, channel); // Set curToken
     }
 
     private handleCOLONEQUALtokenInIString(): void { // ISTRING = interpolated string (FSTRING or TSTRING)
@@ -671,9 +671,9 @@ export default abstract class PythonLexerBase extends Lexer {
         this.addPendingToken(this.curToken!);
     }
 
-    private replaceCurrentToken(type: number, text: string, channel: number): void {
+    private replaceCurrentToken(tokenType: number, text: string, channel: number): void {
         const token: CommonToken = this.curToken!.clone();
-        token.type = type;
+        token.type = tokenType;
         token.text = text;
         token.channel = channel;
         token.column += 1;

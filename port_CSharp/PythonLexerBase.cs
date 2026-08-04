@@ -706,7 +706,7 @@ public abstract class PythonLexerBase : Lexer
 
     }
 
-    private void TrimLastCharAddPendingTokenSetCurToken(int type, string text, int channel)
+    private void TrimLastCharAddPendingTokenSetCurToken(int tokenType, string text, int channel)
     {
         // trim the last char and add the modified curToken to the pendingTokenQueue
         var curTokenText = this.curToken.Text;
@@ -716,7 +716,7 @@ public abstract class PythonLexerBase : Lexer
         token.StopIndex -= 1;
         this.AddPendingToken(token);
 
-        this.ReplaceCurrentToken(type, text, channel); // set curToken
+        this.ReplaceCurrentToken(tokenType, text, channel); // set curToken
     }
 
     private void HandleCOLONEQUALtokenInIString() // ISTRING = interpolated string (FSTRING or TSTRING)
@@ -753,10 +753,10 @@ public abstract class PythonLexerBase : Lexer
         this.AddPendingToken(this.curToken);
     }
 
-    private void ReplaceCurrentToken(int type, string text, int channel)
+    private void ReplaceCurrentToken(int tokenType, string text, int channel)
     {
         var token = new CommonToken(this.curToken);
-        token.Type = type;
+        token.Type = tokenType;
         token.Text = text;
         token.Channel = channel;
         token.Column += 1;

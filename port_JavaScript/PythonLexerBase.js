@@ -633,14 +633,14 @@ export default class PythonLexerBase extends Lexer {
         return text.length <= 2 ? text : text.slice(-2);
     }
 
-    #trimLastCharAddPendingTokenSetCurToken(type, text, channel) {
+    #trimLastCharAddPendingTokenSetCurToken(tokenType, text, channel) {
         // trim the last char and add the modified curToken to the pendingTokenQueue
         const tokenTextWithoutLastChar = this.#curToken.text.slice(0, -1);
         this.#curToken.text = tokenTextWithoutLastChar;
         this.#curToken.stop -= 1;
         this.#addPendingToken(this.#curToken);
 
-        this.#replaceCurrentToken(type, text, channel); // set curToken
+        this.#replaceCurrentToken(tokenType, text, channel); // set curToken
     }
 
     #handleCOLONEQUALtokenInIString() { // ISTRING = interpolated string (FSTRING or TSTRING)
@@ -674,7 +674,7 @@ export default class PythonLexerBase extends Lexer {
         this.#addPendingToken(this.#curToken);
     }
 
-    #replaceCurrentToken(type, text, channel) {
+    #replaceCurrentToken(tokenType, text, channel) {
         const token = this.#curToken.clone();
         token.type = type;
         token.text = text;
