@@ -576,7 +576,7 @@ fragment EXPONENT       : ('e' | 'E') ('+' | '-')? DIGIT_PART;
 fragment IMAG_NUMBER : (FLOAT_NUMBER | DIGIT_PART) ('j' | 'J');
 
 // https://github.com/RobEin/ANTLR4-parser-for-Python-3.14/tree/main/utils/valid_chars_in_py_identifiers
-fragment ID_CONTINUE // for Python 3.14.2
+fragment ID_CONTINUE // for Python 3.14.6
     : ID_START
     | '\u{0030}' .. '\u{0039}'
     | '\u{00B7}'
@@ -973,7 +973,7 @@ fragment ID_CONTINUE // for Python 3.14.2
     | '\u{E0100}' .. '\u{E01EF}'
     ;
 
-fragment ID_START // for Python 3.14.2
+fragment ID_START // for Python 3.14.6
     : '\u{0041}' .. '\u{005A}'
     | '\u{005F}'
     | '\u{0061}' .. '\u{007A}'
@@ -1660,3 +1660,4 @@ fragment ID_START // for Python 3.14.2
     | '\u{30000}' .. '\u{3134A}'
     | '\u{31350}' .. '\u{323AF}'
     ;
+    
